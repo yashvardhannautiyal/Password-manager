@@ -1,39 +1,92 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useEffect, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { ToastContainer, toast } from "react-toastify";
 const Manager = () => {
   const [form, setForm] = useState({ siteName: "", password: "" });
-  const [passwordArray, setPasswordArray] = useState([])
-  
-  //saving password in localstorage
-    useEffect(() =>{
-        let password = localStorage.getItem("password");
-    // let passwordArray;
-    if(password){
-        setPasswordArray(JSON.parse(password))
-    }
-    // else{
-        
-    // }
-    }, [])
+  const [passwordArray, setPasswordArray] = useState([]);
+  const passwordRef = useRef();
 
-    const savePass = () => { 
-      setPasswordArray([...passwordArray, form])
-      localStorage.setItem("password", JSON.stringify([...passwordArray, form]))
-      console.log([...passwordArray, form])
-      
+  //saving password in localstorage
+  useEffect(() => {
+    let password = localStorage.getItem("password");
+    if (password) {
+      setPasswordArray(JSON.parse(password));
+    }
+  }, []);
+
+  const savePass = () => {
+    setPasswordArray([...passwordArray, { ...form, id: uuidv4() }]);
+    localStorage.setItem(
+      "password",
+      JSON.stringify([...passwordArray, { ...form, id: uuidv4() }])
+    );
+    console.log([...passwordArray, form]);
+
+    toast("Password saved!", {
+      position: "bottom-right",
+      autoClose: 4000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+  const deletePass = (id) => {
+    console.log("deleting password with id : " + id);
+    let confirmation = confirm("Do your really want to delete this password?");
+    if (confirmation) {
+      setPasswordArray(passwordArray.filter((item) => item.id != id));
+      localStorage.setItem(
+        "password",
+        JSON.stringify(passwordArray.filter((item) => item.id != id))
+      );
+    }
+    toast("Password deleted!", {
+      position: "bottom-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+  const editPass = (id) => {
+    console.log("editing password with id : " + id);
+    setForm(passwordArray.filter((item) => item.id === id)[0]);
+    setPasswordArray(passwordArray.filter((item) => item.id != id));
   };
 
   //show hidden password
   const showPass = () => {
-    alert("show the password");
+    if (passwordRef.current.type === "password") {
+      passwordRef.current.type = "text";
+    } else if (passwordRef.current.type === "text") {
+      passwordRef.current.type = "password";
+    }
   };
 
-
-  const handleChange = (e) =>{
-        setForm({...form, [e.target.name] : e.target.value})
-  }
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
   return (
     <>
+      {/* taostify container  */}
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       {/* app - background  */}
       <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]">
         <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-pink-800 opacity-20 blur-[100px]"></div>
@@ -41,7 +94,9 @@ const Manager = () => {
 
       <div className="container mx-auto pt-3 px-36 ">
         <div className="flex justify-center">
-          <p className="pb-4">Save your password at your place</p>
+          <p className="pb-4 text-xl font-bold">
+            Save your password at your place
+          </p>
         </div>
         <div className="flex gap-5 pb-4">
           <input
@@ -54,16 +109,18 @@ const Manager = () => {
               focus:outline-none focus:ring-0"
           />
           <input
+            ref={passwordRef}
             value={form.password}
             onChange={handleChange}
-            type="text"
+            type="password"
             name="password"
-            placeholder="enter passowrd"
+            placeholder="enter password"
             className="border border-pink-800 rounded-lg px-2 text-sm w-1/2
               focus:outline-none focus:ring-0"
           />
           <span className="right-0 hover:cursor-pointer">
             <lord-icon
+              onClick={showPass}
               src="https://cdn.lordicon.com/dicvhxpz.json"
               trigger="hover"
               colors="primary:#121331,secondary:#c7166f"
@@ -73,11 +130,80 @@ const Manager = () => {
         </div>
         <div className="flex justify-center">
           <button
-            className="hover:bg-pink-500 bg-pink-600 border border-pink-800 rounded-full px-2 w-36"
+            className="hover:bg-pink-500 bg-pink-600 ring-1 ring-black rounded-full px-4 w-auto flex justify-center items-center gap-2"
             onClick={savePass}
+            trigger="hover"
           >
             Add Password
+            <lord-icon
+              className="h-6"
+              src="https://cdn.lordicon.com/sbnjyzil.json"
+              trigger="hover"
+              state="hover-swirl"
+              colors="primary:#121331,secondary:#121331"
+            ></lord-icon>
           </button>
+        </div>
+
+        {/* Displaying passwords  */}
+        <div className="container flex justify-center items-center">
+          <div className="mt-8 ">
+            <h2 className="p-2 font-bold text-xl">Your passwords</h2>
+
+            {passwordArray.length === 0 && <div>No passwords to show </div>}
+            {passwordArray.length != 0 && (
+              <table className="table-auto ">
+                <thead className="ring-1 ring-black rounded-2xl">
+                  <tr>
+                    <th className="text-left bg-pink-600 px-2 rounded-l-2xl ">
+                      Site
+                    </th>
+                    <th className="text-left bg-pink-600">Password</th>
+                    <th className="text-left bg-pink-600 rounded-r-2xl">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {passwordArray.map((item, index) => {
+                    return (
+                      <tr key={index}>
+                        <td className="text-left w-52 p-2">{item.siteName}</td>
+                        <td className="text-left w-52 p-2 ">{item.password}</td>
+                        <td className="text-left w-20">
+                          <span
+                            onClick={() => {
+                              editPass(item.id);
+                            }}
+                          >
+                            <lord-icon
+                              className="h-5 cursor-pointer"
+                              src="https://cdn.lordicon.com/exymduqj.json"
+                              trigger="hover"
+                              colors="primary:#121331,secondary:#c7166f"
+                            ></lord-icon>
+                          </span>
+                          <span
+                            onClick={() => {
+                              deletePass(item.id);
+                            }}
+                          >
+                            <lord-icon
+                              className="h-5 cursor-pointer"
+                              src="https://cdn.lordicon.com/jzinekkv.json"
+                              trigger="hover"
+                              colors="primary:#121331,secondary:#c7166f"
+                              // style="width:250px;height:250px"
+                            ></lord-icon>
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
+          </div>
         </div>
       </div>
     </>
