@@ -92,20 +92,20 @@ const Manager = () => {
         <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-pink-800 opacity-20 blur-[100px]"></div>
       </div>
 
-      <div className="container mx-auto pt-3 px-36 ">
+      <div className="container mx-auto mt-6 sm:pt-3 sm:px-36 ">
         <div className="flex justify-center">
-          <p className="pb-4 text-xl font-bold">
+          <p className="sm:pb-4 sm:text-xl sm:font-bold font-medium mt-2 sm:mt-0">
             Save your password at your place
           </p>
         </div>
-        <div className="flex gap-5 pb-4">
+        <div className="flex flex-col sm:flex-row sm:gap-5 px-2 sm:p-0 gap-2 mt-2 sm:mt-0 m-3 sm:m-5">
           <input
             value={form.siteName}
             onChange={handleChange}
             type="text"
             name="siteName"
             placeholder="enter site name"
-            className=" border border-pink-800 rounded-lg px-2 w-1/2
+            className=" border border-pink-800 rounded-lg sm:px-2 px-1 sm:w-1/2
               focus:outline-none focus:ring-0"
           />
           <input
@@ -115,9 +115,9 @@ const Manager = () => {
             type="password"
             name="password"
             placeholder="enter password"
-            className="border border-pink-800 rounded-lg px-2 text-sm w-1/2
+            className="border border-pink-800 rounded-lg sm:px-2 px-1 sm:w-1/2
               focus:outline-none focus:ring-0"
-          />
+          /> <div className="flex justify-center sm:flex-none">
           <span className="right-0 hover:cursor-pointer">
             <lord-icon
               onClick={showPass}
@@ -126,17 +126,17 @@ const Manager = () => {
               colors="primary:#121331,secondary:#c7166f"
               className="h-6"
             ></lord-icon>
-          </span>
+          </span></div>
         </div>
         <div className="flex justify-center">
           <button
-            className="hover:bg-pink-500 bg-pink-600 ring-1 ring-black rounded-full px-4 w-auto flex justify-center items-center gap-2"
+            className="hover:bg-pink-500 bg-pink-600 ring-1 ring-black rounded-full px-4 w-auto flex justify-center items-center gap-1 sm:gap-2"
             onClick={savePass}
             trigger="hover"
           >
             Add Password
             <lord-icon
-              className="h-6"
+              className="sm:h-6 h-5"
               src="https://cdn.lordicon.com/sbnjyzil.json"
               trigger="hover"
               state="hover-swirl"
@@ -147,12 +147,12 @@ const Manager = () => {
 
         {/* Displaying passwords  */}
         <div className="container flex justify-center items-center">
-          <div className="mt-8 ">
-            <h2 className="p-2 font-bold text-xl">Your passwords</h2>
+          <div className="mt-6 sm:mt-8">
+            <h2 className="p-2 font-medium sm:font-bold sm:text-xl">Your passwords</h2>
 
             {passwordArray.length === 0 && <div>No passwords to show </div>}
             {passwordArray.length != 0 && (
-              <table className="table-auto ">
+              <table className="table-auto">
                 <thead className="ring-1 ring-black rounded-2xl">
                   <tr>
                     <th className="text-left bg-pink-600 px-2 rounded-l-2xl ">
@@ -168,8 +168,8 @@ const Manager = () => {
                   {passwordArray.map((item, index) => {
                     return (
                       <tr key={index}>
-                        <td className="text-left w-52 p-2">{item.siteName}</td>
-                        <td className="text-left w-52 p-2 ">{item.password}</td>
+                        <td className="text-left sm:w-52 w-32 p-2">{item.siteName}</td>
+                        <td className="text-left sm:w-52 w-32 p-2 ">{item.password}</td>
                         <td className="text-left w-20">
                           <span
                             onClick={() => {
