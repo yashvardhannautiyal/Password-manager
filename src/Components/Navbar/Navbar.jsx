@@ -30,12 +30,13 @@ function Navbar() {
           Login
         </li>
         <li className="hover:text-pink-600 hover:cursor-pointer flex items-center">
+          <a href="https://github.com/yashvardhannautiyal/Password-manager" target="_blank">
           <lord-icon
             src="https://cdn.lordicon.com/jjxzcivr.json"
             trigger="hover"
             colors="primary:#121331,secondary:#c7166f"
             className="sm:h-6 h-5"
-          ></lord-icon>
+          ></lord-icon></a>
         </li>
       </ul>
     </nav>
