@@ -98,14 +98,14 @@ const Manager = () => {
             Save your password at your place
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row sm:gap-5 px-2 sm:p-0 gap-2 mt-2 sm:mt-0 m-3 sm:m-5">
+        <div className="flex justify-center  sm:gap-5 sm:px-2 sm:p-0 gap-2 mt-2 sm:mt-0 m-3 sm:m-5">
           <input
             value={form.siteName}
             onChange={handleChange}
             type="text"
             name="siteName"
             placeholder="enter site name"
-            className=" border border-pink-800 rounded-lg sm:px-2 px-1 sm:w-1/2
+            className="border border-pink-800 rounded-lg sm:px-2 px-1 w-32 sm:w-1/2
               focus:outline-none focus:ring-0"
           />
           <input
@@ -115,7 +115,7 @@ const Manager = () => {
             type="password"
             name="password"
             placeholder="enter password"
-            className="border border-pink-800 rounded-lg sm:px-2 px-1 sm:w-1/2
+            className="border border-pink-800 rounded-lg sm:px-2 px-1 w-32 sm:w-1/2
               focus:outline-none focus:ring-0"
           /> <div className="flex justify-center sm:flex-none">
           <span className="right-0 hover:cursor-pointer">
